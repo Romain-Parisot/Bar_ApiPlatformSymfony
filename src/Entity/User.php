@@ -23,13 +23,11 @@ use App\State\UserPasswordHasherProcessor;
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ApiResource(
-    normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:write']],
-)]
-#[ApiResource(
+        normalizationContext: ['groups' => ['read']],
+        denormalizationContext: ['groups' => ['write']],
         operations: [
         new GetCollection(security: "is_granted('ROLE_PATRON')"),
-        new Post(security: "is_granted('ROLE_PATRON')", processor: UserPasswordHasherProcessor::class),
+        new Post(processor: UserPasswordHasherProcessor::class),
         new Get(security: "is_granted('ROLE_PATRON')"),
         new Put(security: "is_granted('ROLE_PATRON')", processor: UserPasswordHasherProcessor::class),
         new Patch(security: "is_granted('ROLE_PATRON')", processor: UserPasswordHasherProcessor::class),
@@ -45,22 +43,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Groups(['read, write'])]
+    #[Groups(['read', 'write'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Groups(['read, write'])]
+    #[Groups(['read', 'write'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups(['read, write'])]
+    #[Groups('read')]
     private ?string $password = null;
+
+    #[Groups('write')]
+    private ?string $plainPassword = null;
 
     /**
      * @var Collection<int, Commande>
@@ -69,7 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $commandes;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read, write'])]
+    #[Groups(['read', 'write'])]
     private ?string $firstName = null;
 
     public function __construct()
@@ -190,6 +191,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
