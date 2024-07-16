@@ -5,7 +5,22 @@ namespace App\Entity;
 use App\Repository\CommandeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 
+#[ApiResource(
+        operations: [
+        new GetCollection(security: "is_granted('ROLE_PATRON') || is_granted('ROLE_BARMAN')"),
+        new Post(),
+        new Get(security: "is_granted('ROLE_PATRON') || is_granted('ROLE_BARMAN')"),
+        new Patch(security: "is_granted('ROLE_PATRON') || is_granted('ROLE_BARMAN') || is_granted('ROLE_WAITER')"),
+        new Delete(security: "is_granted('ROLE_PATRON')"),
+    ],
+)]
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
 {
