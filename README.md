@@ -45,6 +45,12 @@ JWT_PASSPHRASE=2fa26d2563f04b9e02e4bf5984b82fb77aa90a4ff21971b4a8c99846158df899
 
 5. Run this command to create the database:
    `php bin/console doctrine:database:create`
+   
+6. Run this command to create a migration
+   `php bin/console make:migration`
+   
+7. And finnaly this command to apply the migration
+   `php bin/console d:m:m`
 
 ## Running the Project
 
