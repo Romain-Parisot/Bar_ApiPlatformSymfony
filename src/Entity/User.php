@@ -27,7 +27,7 @@ use App\State\UserPasswordHasherProcessor;
         denormalizationContext: ['groups' => ['write']],
         operations: [
         new GetCollection(security: "is_granted('ROLE_PATRON')"),
-        new Post(processor: UserPasswordHasherProcessor::class),
+        new Post(security: "is_granted('ROLE_PATRON')", processor: UserPasswordHasherProcessor::class),
         new Get(security: "is_granted('ROLE_PATRON')"),
         new Put(security: "is_granted('ROLE_PATRON')", processor: UserPasswordHasherProcessor::class),
         new Patch(security: "is_granted('ROLE_PATRON')", processor: UserPasswordHasherProcessor::class),

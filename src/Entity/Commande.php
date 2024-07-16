@@ -11,13 +11,14 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use DateTimeImmutable;
 
 #[ApiResource(
         operations: [
         new GetCollection(security: "is_granted('ROLE_PATRON') || is_granted('ROLE_BARMAN')"),
         new Post(),
         new Get(security: "is_granted('ROLE_PATRON') || is_granted('ROLE_BARMAN')"),
-        new Patch(security: "is_granted('ROLE_PATRON') || is_granted('ROLE_BARMAN') || is_granted('ROLE_WAITER')"),
+        new Patch(security: "is_granted('ROLE_PATRON') || is_granted('ROLE_BARMAN') || is_granted('ROLE_SERVEUR')"),
         new Delete(security: "is_granted('ROLE_PATRON')"),
     ],
 )]
@@ -46,6 +47,12 @@ class Commande
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
+
+    public function __construct()
+    {
+        // Automatically set the createdDate to the current date and time
+        $this->createdDate = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
