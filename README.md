@@ -1,6 +1,7 @@
 # Bar_ApiPlatformSymfony
 
-This is a student project to learn about api using symfony.
+This is a student project to learn about api using symfony. <br>
+The Subject of this exercice is available here: https://docs.yoanncoualan.com/api-platform/evaluations/iim-A3-1
 
 ## Authors
 
