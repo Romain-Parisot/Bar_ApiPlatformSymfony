@@ -126,6 +126,12 @@ class Commande
 
     public function setStatus(string $status): static
     {
+        $allowedStatuses = ['en cours de préparation', 'prête', 'payée'];
+
+        if (!in_array($status, $allowedStatuses)) {
+            throw new \InvalidArgumentException(sprintf('Invalid status "%s". Allowed statuses are %s.', $status, implode(', ', $allowedStatuses)));
+        }
+
         $this->status = $status;
 
         return $this;
